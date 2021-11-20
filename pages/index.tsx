@@ -69,10 +69,14 @@ export const getStaticProps: GetStaticProps = async () => {
           }
       }
     `
-  });
+  })
+
+
+  const { mangas } = data
+
   return {
     props: {
-      mangas: data.mangas,
+      mangas: mangas,
     }
   }
 }
