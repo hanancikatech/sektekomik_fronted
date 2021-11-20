@@ -24,6 +24,10 @@ interface Mangas {
 }
 
 const Home: NextPage<Mangas> = ({ mangas }) => {
+  if (!mangas) {
+    return <div>Loading...</div>
+  }
+
   return (
     <Card title={'Latest Post'} renderProps={
       <>
