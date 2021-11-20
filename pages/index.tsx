@@ -1,7 +1,6 @@
-import type { GetServerSideProps, GetStaticProps, NextPage } from 'next'
+import { useQuery } from '@apollo/client';
 import { Card, CardImage } from '../components'
-import { client, gql } from '../config/apollo';
-
+import {MANGA_QUERY} from "../query/manga"
 type Node = {
   sourceUrl: string
 }
@@ -23,16 +22,17 @@ interface Mangas {
   }
 }
 
-const Home: NextPage<Mangas> = ({ mangas }) => {
-  if (!mangas) {
-    return <div>Loading...</div>
-  }
+const Home = () => {
+  const {data , loading } = useQuery<Mangas>(MANGA_QUERY) 
 
+  if (loading) {
+    return <div> loading ... </div> 
+  }
   return (
     <Card title={'Latest Post'} renderProps={
       <>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-          {mangas.nodes.map(manga => (
+          {data?.mangas.nodes.map((manga) => (
             <CardImage
               key={manga.id}
               title={manga.title}
@@ -43,42 +43,6 @@ const Home: NextPage<Mangas> = ({ mangas }) => {
       </>
     } />
   )
-}
-
-export const getStaticProps: GetStaticProps = async () => {
-  const { data } = await client.query({
-    query: gql`
-      {
-          mangas(last: 100) {
-            nodes {
-              title
-              slug
-              featuredImageId
-              id
-              mangaId
-              dateGmt
-              featuredImage {
-                node {
-                  mediaItemId
-                  sourceUrl
-                  uri
-                  title
-                }
-              }
-            }
-          }
-      }
-    `
-  })
-
-
-  const { mangas } = data
-
-  return {
-    props: {
-      mangas: mangas,
-    }
-  }
 }
 
 
