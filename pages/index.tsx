@@ -1,4 +1,4 @@
-import type { GetStaticProps, NextPage } from 'next'
+import type { GetServerSideProps, GetStaticProps, NextPage } from 'next'
 import { Card, CardImage } from '../components'
 import { client, gql } from '../config/apollo';
 
@@ -45,7 +45,7 @@ const Home: NextPage<Mangas> = ({ mangas }) => {
   )
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const { data } = await client.query({
     query: gql`
       {
@@ -70,7 +70,6 @@ export const getStaticProps: GetStaticProps = async () => {
       }
     `
   });
-
   return {
     props: {
       mangas: data.mangas,
