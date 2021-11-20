@@ -45,7 +45,7 @@ const Home: NextPage<Mangas> = ({ mangas }) => {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const { data } = await client.query({
     query: gql`
       {
@@ -73,7 +73,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
   return {
     props: {
       mangas: data.mangas,
-      validate: 1
     }
   }
 }
