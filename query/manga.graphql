@@ -16,9 +16,6 @@ query GetManga{
         content
         slug
         views
-        genres{
-          name
-        }
       }
       media{
         original_url
