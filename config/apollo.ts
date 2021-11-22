@@ -1,11 +1,30 @@
-import { ApolloClient, InMemoryCache , gql} from "@apollo/client";
+import { ApolloClient, ApolloLink, concat, HttpLink, InMemoryCache } from "@apollo/client"
 
-const client = new ApolloClient({
-    uri: 'https://sektekomik.com/graphql',
+
+const httpLink = new HttpLink({ uri: 'http://sektekomik_backend.test/graphql', credentials: "include", });
+
+const headerMiddleware = new ApolloLink((operation, forward) => {
+  // add the authorization to the headers
+  operation.setContext(({ headers = {} }) => ({
+    headers: {
+      ...headers,
+      "Access-Control-Allow-Origin": "*",
+    }
+  }));
+
+  return forward(operation);
+})
+
+export const createApolloClient = () => {
+  return new ApolloClient({
+    ssrMode : true,
+    link: concat(headerMiddleware, httpLink),
     cache: new InMemoryCache()
-});
+  })
+}
 
-export {
-    gql,
-    client
+
+export function useApollo() {
+  const store = createApolloClient()
+  return store;
 }

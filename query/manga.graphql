@@ -1,0 +1,28 @@
+query GetManga{
+  mangas{
+    data{
+      title
+      author
+      release
+      is_hot
+      type
+      description
+      slug
+      categories{
+        name
+      }
+      posts(limit: 3){
+        title
+        content
+        slug
+        views
+        genres{
+          name
+        }
+      }
+      media{
+        original_url
+      }
+    }
+  }
+}
